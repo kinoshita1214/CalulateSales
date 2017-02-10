@@ -1,4 +1,4 @@
-package jp.co.plusize.kinoshita_keisuke.summary_sales;
+package jp.co.plusize.kinoshita_keisuke.calculate_sales;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,12 +19,18 @@ public class SummarySale {
 		HashMap<String,Long> branchSales = new HashMap<String,Long>();
 		HashMap<String,String> commodity = new HashMap<String,String>();
 		HashMap<String,Long> commoditySales = new HashMap<String,Long>();
+		//if(!(args[0].length()) != 1 ){
+		//	System.out.println("予期せぬエラーが発生しました");
+		//}
 		try {
 			//支店定義ファイルの読み込み
 			File file = new File(args[0], "branch.lst");
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			String s;
+			if(!file.exists()) {
+				System.out.println("支店定義ファイルが存在しません");
+			}
 
 			while((s = br.readLine()) != null) {
 				String[] items = s.split(",");
@@ -38,7 +44,7 @@ public class SummarySale {
 			}
 			br.close();
 		} catch(IOException e) {
-			System.out.println("支店定義ファイルが存在しません");
+			System.out.println("予期せぬエラーが発生しました");
 		}
 			//商品定義ファイルの読み込み
 		try {
@@ -46,7 +52,9 @@ public class SummarySale {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			String s;
-
+			if(!file.exists()) {
+				System.out.println("商品定義ファイルが存在しません");
+			}
 			while((s = br.readLine()) != null) {
 				String[] items = s.split(",");
 				if(items.length != 2 || !items[0].matches("[A-Z|a-z|0-9]{8}")) {
@@ -58,7 +66,7 @@ public class SummarySale {
 			}
 			br.close();
 		} catch(IOException e) {
-			System.out.println("商品定義ファイルが存在しません");
+			System.out.println("予期せぬエラーが発生しました");
 		}
 
 		//集計
@@ -173,6 +181,7 @@ public class SummarySale {
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
 		}
+
 
 
 	}
