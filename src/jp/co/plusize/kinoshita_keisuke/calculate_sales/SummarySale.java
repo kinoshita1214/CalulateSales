@@ -37,7 +37,7 @@ public class SummarySale {
 			while((s = br.readLine()) != null) {
 				String[] items = s.split(",");
 
-				if(items.length != 2 || !items[0].matches("[0-9]{3}") || file.isFile()) {
+				if(items.length != 2 || !items[0].matches("[0-9]{3}") || !file.isFile()) {
 					System.out.println("支店定義ファイルのフォーマットが不正です");
 					return;
 				}
@@ -65,7 +65,7 @@ public class SummarySale {
 
 			while((s = br.readLine()) != null) {
 				String[] items = s.split(",");
-				if(items.length != 2 || !items[0].matches("[A-Z|a-z|0-9]{8}") || file.isFile()) {
+				if(items.length != 2 || !items[0].matches("[A-Z|a-z|0-9]{8}") || !file.isFile()) {
 					System.out.println("商品定義ファイルのフォーマットが不正です");
 					return;
 				}
