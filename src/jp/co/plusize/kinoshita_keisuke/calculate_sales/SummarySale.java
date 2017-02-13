@@ -140,6 +140,7 @@ public class SummarySale {
 					System.out.println(list.get(i).getName() + "の商品コードが不正です");
 					return;
 				}
+				//支店別集計
 				long sum1 = branchSales.get(Code1); //元の値を参照
 				sum1 += money;
 				if(sum1 > 9999999999L) {
@@ -147,6 +148,7 @@ public class SummarySale {
 					 return;
 				}
 				branchSales.put(Code1,sum1);
+				//商品別集計
 				long sum2 =commoditySales.get(Code2);
 				sum2 += money;
 				if(sum2 > 9999999999L) {
