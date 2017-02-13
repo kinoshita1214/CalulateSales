@@ -48,7 +48,9 @@ public class SummarySale {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		} finally {
+			if(br != null) {
 			br.close();
+			}
 		}
 			//商品定義ファイルの読み込み
 		try {
@@ -74,7 +76,9 @@ public class SummarySale {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		} finally {
+			if(br != null) {
 			br.close();
+			}
 		}
 
 		//集計
@@ -152,7 +156,9 @@ public class SummarySale {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		} finally {
+			if(br != null) {
 			br.close();
+			}
 		}
 		BufferedWriter bw =null;
 		try {
@@ -174,7 +180,9 @@ public class SummarySale {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		} finally {
+			if(bw != null) {
 			bw.close();
+			}
 		}
 		try {
 			//商品別集計ファイルに出力
@@ -195,7 +203,9 @@ public class SummarySale {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		} finally {
+			if(bw != null) {
 			bw.close();
+			}
 		}
 	}
 }
