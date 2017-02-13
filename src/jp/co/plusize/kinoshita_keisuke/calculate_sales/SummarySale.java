@@ -169,11 +169,11 @@ public class SummarySale {
 		BufferedWriter bw =null;
 
 	}
-	public static void output(File args ,File name , Map map1 , Map map2) {
+	public static void output(File name1 ,File name2 , Map map1 , Map map2) {
 		BufferedWriter bw =null;
 		try {
 			//支店別集計ファイルを出力
-			File file = new File(args,"name");
+			File file = new File(name1,"name2");
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
 			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(map2.entrySet());
