@@ -21,6 +21,7 @@ public class SummarySale {
 		HashMap<String,Long> commoditySales = new HashMap<String,Long>();
 		if(args.length != 1 ){
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		}
 		BufferedReader br = null;
 		try {
@@ -45,6 +46,7 @@ public class SummarySale {
 			}
 		} catch(IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			br.close();
 		}
@@ -70,6 +72,7 @@ public class SummarySale {
 			}
 		} catch(IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			br.close();
 		}
@@ -100,6 +103,7 @@ public class SummarySale {
 
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		}
 		try {
 			for(int i = 0; i < list.size(); i++) {
@@ -129,7 +133,7 @@ public class SummarySale {
 					return;
 				}
 				if(!commodity.containsKey(Code2)) {
-					System.out.println("<" + Code2 + ">の商品コードが不正です");
+					System.out.println("<" + list.get(i).getName() + ">の商品コードが不正です");
 					return;
 				}
 				//branchSales.put(bCode, money);
@@ -140,11 +144,13 @@ public class SummarySale {
 				commoditySales.put(Code2, money);
 				if(sum > 9999999999L) {
 					 System.out.println("合計金額が10桁を超えました");
+					 return;
 				}
 
 			}
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			br.close();
 		}
@@ -165,7 +171,8 @@ public class SummarySale {
 				bw.write(s.getKey() + ","+ branch.get(s.getKey()) + "," + s.getValue() + System.getProperty("line.separator"));
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			bw.close();
 		}
@@ -186,6 +193,7 @@ public class SummarySale {
 			}
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
+			return;
 		} finally {
 			bw.close();
 		}
