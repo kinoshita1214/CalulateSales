@@ -19,7 +19,7 @@ public class SummarySale {
 		HashMap<String,Long> branchSales = new HashMap<String,Long>();
 		HashMap<String,String> commodity = new HashMap<String,String>();
 		HashMap<String,Long> commoditySales = new HashMap<String,Long>();
-		if(args.length != 1) {
+		if(args.length != 1 ) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
@@ -80,7 +80,6 @@ public class SummarySale {
 			br.close();
 			}
 		}
-
 		//集計
 		File dir =new File(args[0]);
 		File[] files = dir.listFiles();
@@ -88,6 +87,10 @@ public class SummarySale {
 		try {
 			for(int i = 0; i < files.length; i++) {
 				File file = files[i];
+				if(!file.isFile()) {
+					System.out.println("予期せぬエラーが発生しました");
+					return;
+				}
 				String fileName = file.getName(); //ファイルからファイル名を取得
 				if(fileName.matches("[0-9]{8}.rcd$")){
 					list.add(file); //リスト化
@@ -95,10 +98,10 @@ public class SummarySale {
 			}
 			//連番チェック
 			for(int i =0; i + 1 < list.size() - 1; i++) {
-				String str = list.get(i).getName().substring(0, 8);
-				String stt = list.get(i+1).getName().substring(0, 8);
-				int one = Integer.parseInt(str);
-				int two = Integer.parseInt(stt);
+				String str１ = list.get(i).getName().substring(0, 8);
+				String str2 = list.get(i+1).getName().substring(0, 8);
+				int one = Integer.parseInt(str１);
+				int two = Integer.parseInt(str2);
 				if(two - one != 1){
 					System.out.println("売上ファイル名が連番になっていません");
 					return;
@@ -123,7 +126,7 @@ public class SummarySale {
 					proceeds.add(str);
 				}
 				if(proceeds.size() != 3) {
-					System.out.println("<" + list.get(i).getName() + ">のフォーマットが不正です");
+					System.out.println(list.get(i).getName() + "のフォーマットが不正です");
 					return;
 				}
 
@@ -170,10 +173,6 @@ public class SummarySale {
 		try {
 			//支店別集計ファイルを出力
 			File file = new File(args[0],"branch.out");
-			if(!file.exists() || !file.isFile()) {
-				System.out.println("予期せぬエラーが発生しました");
-				return;
-			}
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
 			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(branchSales.entrySet());
@@ -197,10 +196,6 @@ public class SummarySale {
 		try {
 			//商品別集計ファイルに出力
 			File file = new File(args[0],"commodity.out");
-			if(!file.exists() || !file.isFile()) {
-				System.out.println("予期せぬエラーが発生しました");
-				return;
-			}
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
 			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(commoditySales.entrySet());
