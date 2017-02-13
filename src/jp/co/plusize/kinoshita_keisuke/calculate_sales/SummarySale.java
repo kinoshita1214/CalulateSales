@@ -19,7 +19,7 @@ public class SummarySale {
 		HashMap<String,Long> branchSales = new HashMap<String,Long>();
 		HashMap<String,String> commodity = new HashMap<String,String>();
 		HashMap<String,Long> commoditySales = new HashMap<String,Long>();
-		if(args.length != 1 ){
+		if(args.length != 1) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
@@ -27,7 +27,7 @@ public class SummarySale {
 		try {
 			//支店定義ファイルの読み込み
 			File file = new File(args[0], "branch.lst");
-			if(!file.exists()) {
+			if(!file.exists() || !file.isFile()) {
 				System.out.println("支店定義ファイルが存在しません");
 				return;
 			}
@@ -55,7 +55,7 @@ public class SummarySale {
 			//商品定義ファイルの読み込み
 		try {
 			File file = new File(args[0], "commodity.lst");
-			if(!file.exists()) {
+			if(!file.exists() || !file.isFile()) {
 				System.out.println("商品定義ファイルが存在しません");
 				return;
 			}
@@ -133,23 +133,27 @@ public class SummarySale {
 				String name = proceeds.get(2); //売上額
 				Long money = Long.parseLong(name);
 				if(!branch.containsKey(Code1)) {
-					System.out.println("<" + list.get(i).getName() + ">の支店コードが不正です");
+					System.out.println(list.get(i).getName() + "の支店コードが不正です");
 					return;
 				}
 				if(!commodity.containsKey(Code2)) {
-					System.out.println("<" + list.get(i).getName() + ">の商品コードが不正です");
+					System.out.println(list.get(i).getName() + "の商品コードが不正です");
 					return;
 				}
-				//branchSales.put(bCode, money);
-				//commoditySales.put(cCode, money);
-				long sum = branchSales.get(Code1); //元の値を参照
-				sum += money; //元の値にmoneyを入れる
-				branchSales.put(Code1,money);
-				commoditySales.put(Code2, money);
-				if(sum > 9999999999L) {
+				long sum1 = branchSales.get(Code1); //元の値を参照
+				sum1 += money;
+				if(sum1 > 9999999999L) {
 					 System.out.println("合計金額が10桁を超えました");
 					 return;
 				}
+				branchSales.put(Code1,sum1);
+				long sum2 =commoditySales.get(Code2);
+				sum2 += money;
+				if(sum2 > 9999999999L) {
+					System.out.println("合計金額が10桁を超えました");
+					return;
+				}
+				commoditySales.put(Code2, sum2);
 
 			}
 		} catch(Exception e) {
@@ -164,6 +168,10 @@ public class SummarySale {
 		try {
 			//支店別集計ファイルを出力
 			File file = new File(args[0],"branch.out");
+			if(!file.exists() || !file.isFile()) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
 			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(branchSales.entrySet());
@@ -187,6 +195,10 @@ public class SummarySale {
 		try {
 			//商品別集計ファイルに出力
 			File file = new File(args[0],"commodity.out");
+			if(!file.exists() || !file.isFile()) {
+				System.out.println("予期せぬエラーが発生しました");
+				return;
+			}
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
 			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(commoditySales.entrySet());
