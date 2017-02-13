@@ -167,76 +167,35 @@ public class SummarySale {
 			}
 		}
 		BufferedWriter bw =null;
-		try {
-			//支店別集計ファイルを出力
-			File file = new File(args[0],"branch.out");
-			FileWriter fw = new FileWriter(file);
-			bw = new BufferedWriter(fw);
-			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(branchSales.entrySet());
-			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
 
-				public int compare(Entry<String,Long> entry1,Entry<String,Long> entry2) {
-					return((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
-				}
-			});
-			for(Entry<String,Long> s : entries) {
-				bw.write(s.getKey() + ","+ branch.get(s.getKey()) + "," + s.getValue() + System.getProperty("line.separator"));
-			}
-		} catch(Exception e) {
-			System.out.println("予期せぬエラーが発生しました");
-			return;
-		} finally {
-			if(bw != null) {
-			bw.close();
-			}
-		}
-		try {
-			//商品別集計ファイルに出力
-			File file = new File(args[0],"commodity.out");
-			FileWriter fw = new FileWriter(file);
-			bw = new BufferedWriter(fw);
-			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(commoditySales.entrySet());
-			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
-
-				public int compare(Entry<String,Long> entry1,Entry<String,Long> entry2) {
-					return((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
-				}
-			});
-			for(Entry<String,Long> s : entries) {
-				bw.write(s.getKey() + ","+ commodity.get(s.getKey()) + ","+s.getValue() + System.getProperty("line.separator"));
-			}
-		} catch(Exception e) {
-			System.out.println("予期せぬエラーが発生しました");
-			return;
-		} finally {
-			if(bw != null) {
-			bw.close();
-			}
-		}
 	}
-	public static void output(String n , String m) {
+	public static void output(File args ,File name , Map map1 , Map map2) {
 		BufferedWriter bw =null;
 		try {
 			//支店別集計ファイルを出力
-			File file = new File(args[0],"n.out");
+			File file = new File(args,"name");
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
-			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(m.entrySet());
+			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(map2.entrySet());
 			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
 
 				public int compare(Entry<String,Long> entry1,Entry<String,Long> entry2) {
 					return((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
 				}
 			});
-			for(Entry<String,Long> s : entries) {
-				bw.write(s.getKey() + ","+ n.get(s.getKey()) + "," + s.getValue() + System.getProperty("line.separator"));
+			for(Entry<String,Long> sort : entries) {
+				bw.write(sort.getKey() + ","+ map1.get(sort.getKey()) + "," + sort.getValue() + System.getProperty("line.separator"));
 			}
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		} finally {
 			if(bw != null) {
-			bw.close();
+			try {
+				bw.close();
+			} catch (IOException e) {
+				System.out.println("予期せぬエラーが発生しました");
+			}
 			}
 		}
 	}
