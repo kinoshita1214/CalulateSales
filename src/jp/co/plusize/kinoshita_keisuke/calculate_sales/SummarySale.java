@@ -14,7 +14,7 @@ import java.util.Map.Entry;
 public class SummarySale {
 	private static final String List = null;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		HashMap<String,String> branch = new HashMap<String,String>();
 		HashMap<String,Long> branchSales = new HashMap<String,Long>();
 		HashMap<String,String> commodity = new HashMap<String,String>();
@@ -22,6 +22,7 @@ public class SummarySale {
 		if(args.length != 1 ){
 			System.out.println("予期せぬエラーが発生しました");
 		}
+		BufferedReader br = null;
 		try {
 			//支店定義ファイルの読み込み
 			File file = new File(args[0], "branch.lst");
@@ -30,10 +31,8 @@ public class SummarySale {
 				return;
 			}
 			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			br = new BufferedReader(fr);
 			String s;
-
-
 			while((s = br.readLine()) != null) {
 				String[] items = s.split(",");
 
@@ -44,9 +43,10 @@ public class SummarySale {
 				branch.put(items[0],items[1]); //支店コードと支店名
 				branchSales.put(items[0],0L); //支店コードと金額
 			}
-			br.close();
 		} catch(IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
+		} finally {
+			br.close();
 		}
 			//商品定義ファイルの読み込み
 		try {
@@ -56,7 +56,7 @@ public class SummarySale {
 				return;
 			}
 			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			br = new BufferedReader(fr);
 			String s;
 
 			while((s = br.readLine()) != null) {
@@ -68,10 +68,10 @@ public class SummarySale {
 				commodity.put(items[0],items[1]); //商品コードと商品名
 				commoditySales.put(items[0], 0L); //商品コードと金額
 			}
-			br.close();
 		} catch(IOException e) {
 			System.out.println("予期せぬエラーが発生しました");
-
+		} finally {
+			br.close();
 		}
 
 		//集計
@@ -101,12 +101,11 @@ public class SummarySale {
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
 		}
-
 		try {
 			for(int i = 0; i < list.size(); i++) {
 				ArrayList<String> proceeds = new ArrayList<String>();
 				FileReader fr = new FileReader(list.get(i));
-				BufferedReader br = new BufferedReader(fr);
+				br = new BufferedReader(fr);
 				String s;
 				//proceedsに各値を加えてリストに入れる
 
@@ -121,24 +120,24 @@ public class SummarySale {
 				}
 
 				//マップに支店コードと売上金額を入れて保持
-				String bCode = proceeds.get(0);  //支店コード
-				String cCode = proceeds.get(1); //商品コード
+				String Code1 = proceeds.get(0);  //支店コード
+				String Code2 = proceeds.get(1); //商品コード
 				String name = proceeds.get(2); //売上額
 				Long money = Long.parseLong(name);
-				if(!branch.containsKey(bCode)) {
+				if(!branch.containsKey(Code1)) {
 					System.out.println("<" + list.get(i).getName() + ">の支店コードが不正です");
 					return;
 				}
-				if(!commodity.containsKey(cCode)) {
-					System.out.println("<" + cCode + ">の商品コードが不正です");
+				if(!commodity.containsKey(Code2)) {
+					System.out.println("<" + Code2 + ">の商品コードが不正です");
 					return;
 				}
 				//branchSales.put(bCode, money);
 				//commoditySales.put(cCode, money);
-				long sum = branchSales.get(bCode); //元の値を参照
+				long sum = branchSales.get(Code1); //元の値を参照
 				sum += money; //元の値にmoneyを入れる
-				branchSales.put(bCode,money);
-				commoditySales.put(cCode, money);
+				branchSales.put(Code1,money);
+				commoditySales.put(Code2, money);
 				if(sum > 9999999999L) {
 					 System.out.println("合計金額が10桁を超えました");
 				}
@@ -146,13 +145,15 @@ public class SummarySale {
 			}
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
+		} finally {
+			br.close();
 		}
+		BufferedWriter bw =null;
 		try {
 			//支店別集計ファイルを出力
-			Map<String,Long> unit = new HashMap<String,Long>();
 			File file = new File(args[0],"branch.out");
 			FileWriter fw = new FileWriter(file);
-			BufferedWriter bw = new BufferedWriter(fw);
+			bw = new BufferedWriter(fw);
 			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(branchSales.entrySet());
 			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
 
@@ -163,15 +164,16 @@ public class SummarySale {
 			for(Entry<String,Long> s : entries) {
 				bw.write(s.getKey() + ","+ branch.get(s.getKey()) + "," + s.getValue() + System.getProperty("line.separator"));
 			}
-			bw.close();
 		} catch(Exception e) {
 			e.printStackTrace();
+		} finally {
+			bw.close();
 		}
 		try {
 			//商品別集計ファイルに出力
 			File file = new File(args[0],"commodity.out");
 			FileWriter fw = new FileWriter(file);
-			BufferedWriter bw = new BufferedWriter(fw);
+			bw = new BufferedWriter(fw);
 			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(commoditySales.entrySet());
 			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
 
@@ -182,9 +184,10 @@ public class SummarySale {
 			for(Entry<String,Long> s : entries) {
 				bw.write(s.getKey() + ","+ commodity.get(s.getKey()) + ","+s.getValue() + System.getProperty("line.separator"));
 			}
-			bw.close();
 		} catch(Exception e) {
 			System.out.println("予期せぬエラーが発生しました");
+		} finally {
+			bw.close();
 		}
 	}
 }
