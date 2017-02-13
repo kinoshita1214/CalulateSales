@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 public class SummarySale {
 	private static final String List = null;
-
 	public static void main(String[] args) throws IOException {
 		HashMap<String,String> branch = new HashMap<String,String>();
 		HashMap<String,Long> branchSales = new HashMap<String,Long>();
@@ -215,22 +214,14 @@ public class SummarySale {
 			}
 		}
 	}
-}
-
-
-
-class Calculation {
-	String branch;
-	String commodity;
-
-	BufferedWriter bw =null;
-	try {
-		//支店別集計ファイルを出力
-		void multiply(String n) {
-			File file = new File(args[0],"n + .out");
+	public static void output(String n , String m) {
+		BufferedWriter bw =null;
+		try {
+			//支店別集計ファイルを出力
+			File file = new File(args[0],"n.out");
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
-			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(n + Sales.entrySet());
+			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(m.entrySet());
 			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
 
 				public int compare(Entry<String,Long> entry1,Entry<String,Long> entry2) {
@@ -240,14 +231,13 @@ class Calculation {
 			for(Entry<String,Long> s : entries) {
 				bw.write(s.getKey() + ","+ n.get(s.getKey()) + "," + s.getValue() + System.getProperty("line.separator"));
 			}
-		}
-	} catch(Exception e) {
-		System.out.println("予期せぬエラーが発生しました");
-		return;
-	} finally {
-		if(bw != null) {
-		bw.close();
+		} catch(Exception e) {
+			System.out.println("予期せぬエラーが発生しました");
+			return;
+		} finally {
+			if(bw != null) {
+			bw.close();
+			}
 		}
 	}
-}
 }
