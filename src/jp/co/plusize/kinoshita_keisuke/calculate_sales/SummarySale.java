@@ -27,7 +27,7 @@ public class SummarySale {
 		try {
 			//支店定義ファイルの読み込み
 			File file = new File(args[0], "branch.lst");
-			if(!file.exists() || !file.isFile()) {
+			if(!file.exists()) {
 				System.out.println("支店定義ファイルが存在しません");
 				return;
 			}
@@ -37,7 +37,7 @@ public class SummarySale {
 			while((s = br.readLine()) != null) {
 				String[] items = s.split(",");
 
-				if(items.length != 2 || !items[0].matches("[0-9]{3}") ) {
+				if(items.length != 2 || !items[0].matches("[0-9]{3}") || file.isFile()) {
 					System.out.println("支店定義ファイルのフォーマットが不正です");
 					return;
 				}
@@ -55,7 +55,7 @@ public class SummarySale {
 			//商品定義ファイルの読み込み
 		try {
 			File file = new File(args[0], "commodity.lst");
-			if(!file.exists() || !file.isFile()) {
+			if(!file.exists()) {
 				System.out.println("商品定義ファイルが存在しません");
 				return;
 			}
@@ -65,7 +65,7 @@ public class SummarySale {
 
 			while((s = br.readLine()) != null) {
 				String[] items = s.split(",");
-				if(items.length != 2 || !items[0].matches("[A-Z|a-z|0-9]{8}")) {
+				if(items.length != 2 || !items[0].matches("[A-Z|a-z|0-9]{8}") || file.isFile()) {
 					System.out.println("商品定義ファイルのフォーマットが不正です");
 					return;
 				}
