@@ -68,6 +68,7 @@ public class SummarySale {
 				if(items.length != 2 || !items[0].matches("[A-Z|a-z|0-9]{8}") || !file.isFile()) {
 					System.out.println("商品定義ファイルのフォーマットが不正です");
 					return;
+
 				}
 				commodity.put(items[0],items[1]); //商品コードと商品名
 				commoditySales.put(items[0], 0L); //商品コードと金額
@@ -89,15 +90,16 @@ public class SummarySale {
 				File file = files[i];
 				String fileName = file.getName(); //ファイルからファイル名を取得
 				if(fileName.matches("[0-9]{8}.rcd$") && file.isFile()){
-					list.add(file); //リスト化
+					list.add(file);
 				}
 			}
 			//連番チェック
 			for(int i =0; i + 1 < list.size() - 1; i++) {
-				String str１ = list.get(i).getName().substring(0, 8);
+				String str1 = list.get(i).getName().substring(0, 8);
 				String str2 = list.get(i+1).getName().substring(0, 8);
-				int one = Integer.parseInt(str１);
+				int one = Integer.parseInt(str1);
 				int two = Integer.parseInt(str2);
+
 				if(two - one != 1){
 					System.out.println("売上ファイル名が連番になっていません");
 					return;
@@ -215,3 +217,37 @@ public class SummarySale {
 	}
 }
 
+
+
+class Calculation {
+	String branch;
+	String commodity;
+
+	BufferedWriter bw =null;
+	try {
+		//支店別集計ファイルを出力
+		void multiply(String n) {
+			File file = new File(args[0],"n + .out");
+			FileWriter fw = new FileWriter(file);
+			bw = new BufferedWriter(fw);
+			ArrayList<Map.Entry<String,Long>> entries = new ArrayList<Map.Entry<String, Long>>(n + Sales.entrySet());
+			Collections.sort(entries, new Comparator<Map.Entry<String,Long>>() {
+
+				public int compare(Entry<String,Long> entry1,Entry<String,Long> entry2) {
+					return((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
+				}
+			});
+			for(Entry<String,Long> s : entries) {
+				bw.write(s.getKey() + ","+ n.get(s.getKey()) + "," + s.getValue() + System.getProperty("line.separator"));
+			}
+		}
+	} catch(Exception e) {
+		System.out.println("予期せぬエラーが発生しました");
+		return;
+	} finally {
+		if(bw != null) {
+		bw.close();
+		}
+	}
+}
+}
