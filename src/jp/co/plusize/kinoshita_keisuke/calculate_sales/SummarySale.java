@@ -87,12 +87,8 @@ public class SummarySale {
 		try {
 			for(int i = 0; i < files.length; i++) {
 				File file = files[i];
-				if(!file.isFile()) {
-					System.out.println("予期せぬエラーが発生しました");
-					return;
-				}
 				String fileName = file.getName(); //ファイルからファイル名を取得
-				if(fileName.matches("[0-9]{8}.rcd$")){
+				if(fileName.matches("[0-9]{8}.rcd$") && file.isFile()){
 					list.add(file); //リスト化
 				}
 			}
