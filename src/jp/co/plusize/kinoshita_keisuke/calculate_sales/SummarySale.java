@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 public class SummarySale {
-	private static final String List = null;
 	public static void main(String[] args) throws IOException {
 		HashMap<String,String> branch = new HashMap<String,String>();
 		HashMap<String,Long> branchSales = new HashMap<String,Long>();
@@ -41,13 +40,13 @@ public class SummarySale {
 				}
 			}
 			//連番チェック
-			for(int i =0; i + 1 < list.size() - 1; i++) {
+			for(int i =0; i < list.size() -1 ; i++) {
 				String str1 = list.get(i).getName().substring(0, 8);
 				String str2 = list.get(i+1).getName().substring(0, 8);
 				int one = Integer.parseInt(str1);
 				int two = Integer.parseInt(str2);
 
-				if(two - one != 1){
+				if(two - one != 1 ){
 					System.out.println("売上ファイル名が連番になっていません");
 					return;
 				}
