@@ -61,11 +61,63 @@ public class SummarySale {
 			System.out.println("予期せぬエラーが発生しました");
 			return;
 		}
-		if(!aggregate(args[0] , code1 , 0 , branch , "支店" , sum1 , branchSales )) {
+		BufferedReader br = null;
+		try {
+			for(int i = 0; i < list.size(); i++) {
+				ArrayList<String> proceeds = new ArrayList<String>();
+				FileReader fr = new FileReader(list.get(i));
+				br = new BufferedReader(fr);
+				String s;
+				//proceedsに各値を加えてリストに入れる
+
+
+				while((s = br.readLine()) != null) { //ファイルの中を参照
+					String str = s;
+					proceeds.add(str);
+				}
+				if(proceeds.size() != 3) {
+					System.out.println(list.get(i).getName() + "のフォーマットが不正です");
+					return;
+				}
+
+				//マップに支店コードと売上金額を入れて保持
+				String Code1 = proceeds.get(0);  //支店コード
+				String Code2 = proceeds.get(1); //商品コード
+				String name = proceeds.get(2); //売上額
+				Long money = Long.parseLong(name);
+				if(!branch.containsKey(Code1)) {
+					System.out.println(list.get(i).getName() + "の支店コードが不正です");
+					return;
+				}
+				if(!commodity.containsKey(Code2)) {
+					System.out.println(list.get(i).getName() + "の商品コードが不正です");
+					return;
+				}
+				//支店別集計
+				long sum1 = branchSales.get(Code1); //元の値を参照
+				sum1 += money;
+				if(sum1 > 9999999999L) {
+					 System.out.println("合計金額が10桁を超えました");
+					 return;
+				}
+				branchSales.put(Code1,sum1);
+				//商品別集計
+				long sum2 =commoditySales.get(Code2);
+				sum2 += money;
+				if(sum2 > 9999999999L) {
+					System.out.println("合計金額が10桁を超えました");
+					return;
+				}
+				commoditySales.put(Code2, sum2);
+
+			}
+		} catch(Exception e) {
+			System.out.println("予期せぬエラーが発生しました");
 			return;
-		}
-		if(!aggregate(args[0] , code2 ,1 , commodity , "商品" , sum2 , commoditySales)) {
-			return;
+		} finally {
+			if(br != null) {
+			br.close();
+			}
 		}
 		if(!outputFile(args[0] , "branch.out" , branchSales , branch)) {
 			return;
@@ -106,62 +158,6 @@ public class SummarySale {
 
 		}
 		return true;
-	}
-	public static boolean aggregate(String path , String code , int n ,HashMap<String,String> nameMap , String item , Long sum ,  HashMap<String,Long> saleMap) {
-		File dir =new File(path);
-		File[] files = dir.listFiles();
-		ArrayList<File> list = new ArrayList<File>();
-		BufferedReader br = null;
-		try {
-			for(int i = 0; i < list.size(); i++) {
-				ArrayList<String> proceeds = new ArrayList<String>();
-				FileReader fr = new FileReader(list.get(i));
-				br  = new BufferedReader(fr);
-				String s;
-				//proceedsに各値を加えてリストに入れる
-
-
-				while((s = br.readLine()) != null) { //ファイルの中を参照
-					String str = s;
-					proceeds.add(str);
-				}
-				if(proceeds.size() != 3) {
-					System.out.println(list.get(i).getName() + "のフォーマットが不正です");
-					return false;
-				}
-
-				//マップに支店コードと売上金額を入れて保持
-				code = proceeds.get(n);
-				String name = proceeds.get(2); //売上額
-				Long money = Long.parseLong(name);
-				if(!nameMap.containsKey(code)) {
-					System.out.println(list.get(i).getName() + "の" + item + "コードが不正です");
-					return false;
-				}
-
-				//支店別集計
-				sum = saleMap.get(code); //元の値を参照
-				sum += money;
-				if(sum > 9999999999L) {
-					System.out.println("合計金額が10桁を超えました");
-					return false;
-				}
-				saleMap.put(name,sum);
-
-			}
-		} catch(Exception e) {
-			System.out.println("予期せぬエラーが発生しました");
-			return false;
-		} finally {
-			if(br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					System.out.println("予期せぬエラーが発生しました");
-					return false;
-					}
-				}
-		}return true;
 	}
 	public static boolean inputFile(String path , String fileName , String item , String condition , HashMap<String,String> nameMap , HashMap<String,Long> saleMap) {
 		BufferedReader br = null;
