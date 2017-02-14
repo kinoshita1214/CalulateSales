@@ -57,7 +57,7 @@ public class SummarySale {
 				}
 			}
 
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 			System.out.println ("予期せぬエラーが発生しました");
 			return;
 		}
@@ -110,7 +110,7 @@ public class SummarySale {
 				commoditySales.put(commodityCode, commoditySum);
 
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.out.println ("予期せぬエラーが発生しました");
 			return;
 		} finally {
@@ -148,7 +148,7 @@ public class SummarySale {
 			for (Entry<String,Long> s : entries) {
 				bw.write(s.getKey() + ","+nameMap .get(s.getKey()) + "," + s.getValue() + System.getProperty("line.separator"));
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.out.println ("予期せぬエラーが発生しました");
 			return false;
 		} finally {
