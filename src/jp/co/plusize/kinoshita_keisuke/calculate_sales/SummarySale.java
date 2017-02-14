@@ -116,7 +116,12 @@ public class SummarySale {
 			return;
 		} finally {
 			if(br != null) {
-			br.close();
+				try {
+					br.close();
+				} catch (IOException e) {
+					System.out.println("予期せぬエラーが発生しました");
+					return;
+				}
 			}
 		}
 		if(!outputFile(args[0] , "branch.out" , branchSales , branch)) {
