@@ -13,6 +13,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 public class SummarySale {
 	private static final String List = null;
+	private static final String code1 = null;
+	private static final String code2 = null;
+	private static final Long sum1 = null;
+	private static final Long sum2 = null;
 	public static void main(String[] args) throws IOException {
 		HashMap<String,String> branch = new HashMap<String,String>();
 		HashMap<String,Long> branchSales = new HashMap<String,Long>();
